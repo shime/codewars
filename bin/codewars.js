@@ -12,12 +12,16 @@ if (argv.help){
 }
 
 argv.language = argv.language || "javascript";
+argv.language = argv.language.toLowerCase();
 var command = argv._[0];
 
 if (command === "setup"){
   if (!argv.token) {
     console.log("setup failed, missing required argument: token")
     process.exit(0);
+  }
+  if (!/javascript|ruby/.test(argv.language)){
+    console.log("setup failed, unsupported language: " + argv.language);
   }
   codewars().setup();
   return;
