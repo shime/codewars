@@ -1,0 +1,17 @@
+{
+  "name": "codewars-client",
+  "version": "0.0.0",
+  "description": "Unofficial node client for CodeWars API",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "author": "Hrvoje Simic",
+  "license": "MIT",
+  "dependencies": {
+    "request": "*",
+    "gulp": "*",
+    "gulp-mocha": "*",
+    "expect.js": "*"
+  }
+}
