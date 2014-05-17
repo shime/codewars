@@ -12,6 +12,7 @@
     "request": "*",
     "gulp": "*",
     "gulp-mocha": "*",
-    "expect.js": "*"
+    "expect.js": "*",
+    "minimist": "*"
   }
 }

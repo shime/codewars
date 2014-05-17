@@ -1,0 +1,16 @@
+usage: codewars {COMMANDS} {OPTIONS}
+
+  Unofficial node client for the Codewars API.
+
+COMMANDS:
+
+  setup           Prepares you for communication with the API.
+
+OPTIONS:
+  
+  -h, --help      You're looking at it.
+  -l, --language  The language you're practicing.
+                  Currently only JavaScript and Ruby are supported.
+                  Defaults to JavaScript.
+  -t, --token     Your 'remember user token', read from http://codewars.com.
+
