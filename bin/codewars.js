@@ -23,6 +23,9 @@ if (command === "setup"){
   if (!/javascript|ruby/.test(argv.language)){
     console.log("setup failed, unsupported language: " + argv.language);
   }
-  codewars().setup();
+  codewars().setup({
+    language: argv.language,
+    token: argv.token
+  });
   return;
 }

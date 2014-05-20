@@ -13,6 +13,7 @@
     "gulp": "*",
     "gulp-mocha": "*",
     "expect.js": "*",
-    "minimist": "*"
+    "minimist": "*",
+    "rewire": "*"
   }
 }

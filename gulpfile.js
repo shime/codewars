@@ -12,7 +12,7 @@ gulp.task("default", function(){
 });
 
 gulp.task("test:all", function(){
-  return gulp.src(["test/integration/*_test.js"], { read: false })
+  return gulp.src(["test/**/*_test.js"], { read: false })
              .pipe(mocha({
                reporter: "spec",
                globals: {
