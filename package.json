@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "request": "*",
-    "minimist": "*"
+    "minimist": "*",
+    "mkdirp": "*"
   },
   "devDependencies": {
     "gulp": "*",
