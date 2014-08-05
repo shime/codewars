@@ -47,19 +47,9 @@ if (command === "test"){
   });
 }
 
-function Challenge(body){
-  var body = JSON.parse(body);
-  this.name = body.name;
-  this.description = body.description;
-}
-
-Challenge.prototype.toString = function(){
-  return this.name + '\n=====\n' + this.description;
-}
-
 if (command === "next"){
   codewars().next().then(function(data){
-    var challenge = new Challenge(data.raw.toString('utf-8')),
+    var challenge = require('../challenge')(data.raw.toString('utf-8')),
         msee      = require("msee");
     log(msee.parse(challenge.toString()));
   });
