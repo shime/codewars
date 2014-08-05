@@ -5,6 +5,7 @@ usage: codewars {COMMANDS} {OPTIONS}
 COMMANDS:
 
   setup           Prepares you for communication with the API.
+  test            Checks if the client is ready for communication.
 
 OPTIONS:
   

@@ -30,3 +30,7 @@ if (command === "setup"){
   });
   return;
 }
+
+if (command === "test"){
+  codewars().test();
+}
