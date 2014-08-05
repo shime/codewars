@@ -59,8 +59,8 @@ Challenge.prototype.toString = function(){
 
 if (command === "next"){
   codewars().next().then(function(data){
-    var challenge = new Challenge(data.raw.toString('utf-8'));
-
-    log(challenge.toString());
+    var challenge = new Challenge(data.raw.toString('utf-8')),
+        msee      = require("msee");
+    log(msee.parse(challenge.toString()));
   });
 }

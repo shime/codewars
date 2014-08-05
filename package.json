@@ -13,7 +13,8 @@
     "minimist": "*",
     "mkdirp": "*",
     "restler": "*",
-    "q": "*"
+    "q": "*",
+    "msee": "*"
   },
   "devDependencies": {
     "gulp": "*",
