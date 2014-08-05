@@ -1,28 +1,28 @@
 #!/usr/bin/env node
 
-var fs = require("fs");
-var argv = require('minimist')(process.argv.slice(2),{
-  alias: { h: 'help', t: 'token', l: 'language' }
-});
-var codewars = require("../");
+var fs = require("fs"),
+    argv = require('minimist')(
+      process.argv.slice(2), { alias: { h: 'help', t: 'token', l: 'language' } }
+    ),
+    codewars = require("../"),
+    command  = argv._[0],
+    log = function() { return console.log.apply(console, arguments); };
+
+argv.language = (argv.language || "javascript").toLowerCase();
 
 if (argv.help){
   fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
   return;
 }
 
-argv.language = argv.language || "javascript";
-argv.language = argv.language.toLowerCase();
-var command = argv._[0];
-
 if (command === "setup"){
   if (!argv.token) {
-    console.log("setup failed, missing required argument: token")
-    console.log("read your token here: https://www.codewars.com/users/edit")
+    log("setup failed, missing required argument: token")
+    log("read your token here: https://www.codewars.com/users/edit")
     process.exit(0);
   }
   if (!/javascript|ruby/.test(argv.language)){
-    console.log("setup failed, unsupported language: " + argv.language);
+    log("setup failed, unsupported language: " + argv.language);
   }
   codewars().setup({
     language: argv.language,
