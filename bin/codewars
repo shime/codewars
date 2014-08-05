@@ -18,6 +18,7 @@ var command = argv._[0];
 if (command === "setup"){
   if (!argv.token) {
     console.log("setup failed, missing required argument: token")
+    console.log("read your token here: https://www.codewars.com/users/edit")
     process.exit(0);
   }
   if (!/javascript|ruby/.test(argv.language)){
