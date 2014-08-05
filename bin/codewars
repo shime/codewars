@@ -19,7 +19,7 @@ if (command === "setup"){
   if (!argv.token) {
     log("setup failed, missing required argument: token")
     log("read your token here: https://www.codewars.com/users/edit")
-    process.exit(0);
+    process.exit(1);
   }
   if (!/javascript|ruby/.test(argv.language)){
     log("setup failed, unsupported language: " + argv.language);
@@ -28,9 +28,21 @@ if (command === "setup"){
     language: argv.language,
     token: argv.token
   });
-  return;
+
+  process.exit(0);
 }
 
 if (command === "test"){
-  codewars().test();
+  codewars().test().then(function(){
+    log('Success - ready to rumble!');
+    process.exit(0);
+  }, function(response){
+    var status = response.statusCode,
+        body   = response.raw.toString('utf-8');
+
+    log('Oh noes! Something is wrong.\n');
+    log('Status: ' + status);
+    log('Body:  ' + body);
+    process.exit(1);
+  });
 }

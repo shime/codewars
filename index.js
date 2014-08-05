@@ -1,7 +1,7 @@
 var fs = require("fs"),
     mkdirp = require("mkdirp"),
     rest   = require("restler"),
-    log = function() { return console.log.apply(console, arguments); };
+    Q = require("q");
 
 module.exports = function(opts){
   if (!opts) opts = {};
@@ -35,6 +35,8 @@ C.prototype.setup = function(opts){
 }
 
 C.prototype.test = function(){
+  var df = Q.defer();
+
   fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
     if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
     var token = JSON.parse(data).token;
@@ -47,14 +49,10 @@ C.prototype.test = function(){
       data: { strategy: 'random' },
       headers: { Authorization: token }
     }).on('complete', function(data, response) {
-      var status = response.statusCode;
-      if (status == 200) {
-        log('Success - ready to rumble!');
-      } else {
-        log('Oh noes! Something is wrong.\n');
-        log('Status: ' + status);
-        log('Body:  ' + response.raw.toString('utf-8'));
-      }
+      if (response.statusCode == 200) df.resolve();
+      else df.reject(response);
     });
   });
+
+  return df.promise;
 }

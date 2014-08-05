@@ -12,7 +12,8 @@
     "request": "*",
     "minimist": "*",
     "mkdirp": "*",
-    "restler": "*"
+    "restler": "*",
+    "q": "*"
   },
   "devDependencies": {
     "gulp": "*",
