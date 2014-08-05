@@ -10,10 +10,12 @@
   "license": "MIT",
   "dependencies": {
     "request": "*",
+    "minimist": "*"
+  },
+  "devDependencies": {
     "gulp": "*",
     "gulp-mocha": "*",
     "expect.js": "*",
-    "minimist": "*",
     "rewire": "*"
   }
 }
