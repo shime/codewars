@@ -14,7 +14,8 @@
     "mkdirp": "*",
     "restler": "*",
     "q": "*",
-    "msee": "*"
+    "msee": "*",
+    "prompt": "*"
   },
   "devDependencies": {
     "gulp": "*",

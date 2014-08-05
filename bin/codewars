@@ -48,9 +48,38 @@ if (command === "test"){
 }
 
 if (command === "next"){
+  next();
+}
+
+function next(){
   codewars().next().then(function(data){
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
-        msee      = require("msee");
+        msee      = require("msee"),
+        prompt    = require("prompt");
+     
     log(msee.parse(challenge.toString()));
+
+    prompt.start();
+    prompt.message = '';
+    prompt.delimiter = '';
+
+    prompt.get([{
+
+      name: 'answer',
+      message: 'Take this challenge? [y/N]'.magenta
+
+    }], function (err, result) {
+      if (err) process.exit(1);
+
+      var answer = result.answer;
+
+      if (!result.answer) answer = 'n';
+      answer = answer.trim().toLowerCase();
+
+      if (/^n/.test(answer)) next();
+      if (/^y/.test(answer)) {
+        // TODO: save it
+      }
+    });
   });
 }
