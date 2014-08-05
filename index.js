@@ -34,7 +34,7 @@ C.prototype.setup = function(opts){
   });
 }
 
-C.prototype.test = function(){
+C.prototype.next = function(){
   var df = Q.defer();
 
   fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
@@ -49,10 +49,16 @@ C.prototype.test = function(){
       data: { strategy: 'random' },
       headers: { Authorization: token }
     }).on('complete', function(data, response) {
-      if (response.statusCode == 200) df.resolve();
+      if (response.statusCode == 200) {
+        df.resolve(response);
+      }
       else df.reject(response);
     });
   });
 
   return df.promise;
+}
+
+C.prototype.test = function(){
+  return this.next();
 }
