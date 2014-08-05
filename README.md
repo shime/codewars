@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/shime/codewars.svg)](https://travis-ci.org/shime/codewars)
+
 ## what?
 
 An unofficial client for the [Codewars](http://codewars.com) API. 
