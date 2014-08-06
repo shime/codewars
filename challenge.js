@@ -6,6 +6,7 @@ function Challenge(data){
   this.slug = data.slug;
   this.setup = data.session.setup;
   this.tests = data.session.exampleFixture;
+  this.id = data.session.solutionId;
 }
 
 Challenge.prototype.toString = function(){

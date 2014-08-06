@@ -10,6 +10,16 @@ var fs = require("fs"),
 
 argv.language = (argv.language || "javascript").toLowerCase();
 
+function responseError(response){
+  var status = response.statusCode,
+      body   = response.raw.toString('utf-8');
+
+  log('Oh noes! Something is wrong.\n');
+  log('Status: ' + status);
+  log('Body:  ' + body);
+  process.exit(1);
+}
+
 if (argv.help){
   fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
   return;
@@ -36,15 +46,7 @@ if (command === "test"){
   codewars().test().then(function(){
     log('Success - ready to rumble!');
     process.exit(0);
-  }, function(response){
-    var status = response.statusCode,
-        body   = response.raw.toString('utf-8');
-
-    log('Oh noes! Something is wrong.\n');
-    log('Status: ' + status);
-    log('Body:  ' + body);
-    process.exit(1);
-  });
+  }, responseError);
 }
 
 if (command === "next"){
@@ -78,7 +80,10 @@ function next(){
 
       if (/^n/.test(answer)) next();
       if (/^y/.test(answer)) {
-        codewars().save(challenge);
+        codewars().train(challenge).then(function(data){
+          var challenge = require('../challenge')(data.raw.toString('utf-8'));
+          codewars().save(challenge);
+        }, responseError);
       }
     });
   });
