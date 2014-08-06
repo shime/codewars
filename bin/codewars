@@ -49,12 +49,12 @@ if (command === "test"){
   }, responseError);
 }
 
-if (command === "next"){
-  next();
+if (command === "train"){
+  train();
 }
 
-function next(){
-  codewars().next().then(function(data){
+function train(){
+  codewars().fetch().then(function(data){
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
         msee      = require("msee"),
         prompt    = require("prompt");
@@ -78,7 +78,7 @@ function next(){
       if (!result.answer) answer = 'n';
       answer = answer.trim().toLowerCase();
 
-      if (/^n/.test(answer)) next();
+      if (/^n/.test(answer)) train();
       if (/^y/.test(answer)) {
         codewars().train(challenge).then(function(data){
           var challenge = require('../challenge')(data.raw.toString('utf-8'));

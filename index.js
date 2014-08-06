@@ -35,7 +35,7 @@ C.prototype.setup = function(opts){
   });
 }
 
-C.prototype.next = function(){
+C.prototype.fetch = function(){
   var df = Q.defer();
 
   fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
@@ -94,5 +94,5 @@ C.prototype.train = function(challenge){
 }
 
 C.prototype.test = function(){
-  return this.next();
+  return this.fetch();
 }
