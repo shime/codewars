@@ -20,12 +20,11 @@ function responseError(response){
   process.exit(1);
 }
 
-if (argv.help){
+function help(){
   fs.createReadStream(__dirname + '/usage.txt').pipe(process.stdout);
-  return;
 }
 
-if (command === "setup"){
+function setup(){
   if (!argv.token) {
     log("setup failed, missing required argument: token")
     log("read your token here: https://www.codewars.com/users/edit")
@@ -38,19 +37,13 @@ if (command === "setup"){
     language: argv.language,
     token: argv.token
   });
-
-  process.exit(0);
 }
 
-if (command === "test"){
+function test(){
   codewars().test().then(function(){
     log('Success - ready to rumble!');
     process.exit(0);
   }, responseError);
-}
-
-if (command === "train"){
-  train();
 }
 
 function train(){
@@ -87,4 +80,23 @@ function train(){
       }
     });
   });
+}
+
+if (argv.help) help();
+
+switch (command){
+  case 'setup':
+    setup();
+    break;
+
+  case 'test':
+    test();
+    break;
+
+  case 'train':
+    train();
+    break;
+
+  default:
+    help();
 }
