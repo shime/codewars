@@ -36,7 +36,36 @@ C.prototype.setup = function(opts){
 }
 
 C.prototype.fetch = function(){
-  var df = Q.defer();
+  var df = Q.defer(),
+      current = C.paths.challenges + 'current.json';
+
+  if (fs.existsSync(current)){
+    var prompt = require("prompt");
+    prompt.start();
+    prompt.message = "";
+    prompt.delimiter = "";
+    prompt.get([{
+
+      name: 'answer',
+      message: 'Current challenge is in progress. Dismiss? [y/N]'.magenta
+
+    }], function (err, result) {
+      if (err) process.exit(1);
+
+      var answer = result.answer;
+
+      if (!result.answer) answer = 'n';
+      answer = answer.trim().toLowerCase();
+
+      if (/^n/.test(answer)) { 
+        console.log('returning');
+        return df.resolve();
+      }
+      if (/^y/.test(answer)) {
+        fs.unlink(current);
+      }
+    });
+  }
 
   fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
     if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"

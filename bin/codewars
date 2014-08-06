@@ -48,6 +48,8 @@ function test(){
 
 function train(){
   codewars().fetch().then(function(data){
+    if (!data) return; 
+
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
         msee      = require("msee"),
         prompt    = require("prompt");
