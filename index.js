@@ -14,7 +14,8 @@ function C (opts){
 }
 
 C.paths = {
-  config: process.env.HOME + "/.config/"
+  config: process.env.HOME + "/.config/",
+  api: 'https://www.codewars.com/api/v1/code-challenges/'
 }
 C.paths.settings = C.paths.config + "codewars/";
 C.paths.challenges = C.paths.settings + "challenges/";
@@ -45,7 +46,7 @@ C.prototype.next = function(){
     if (!language) throw "Language not found, run 'codewars setup' first."
     if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
 
-    rest.post('https://www.codewars.com/api/v1/code-challenges/' + language + '/train', {
+    rest.post(C.paths.api + language + '/train', {
       data: { strategy: 'random' },
       headers: { Authorization: token }
     }).on('complete', function(data, response) {
