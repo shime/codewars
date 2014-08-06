@@ -17,6 +17,7 @@ C.paths = {
   config: process.env.HOME + "/.config/"
 }
 C.paths.settings = C.paths.config + "codewars/";
+C.paths.challenges = C.paths.settings + "challenges/";
 
 C.prototype.setup = function(opts){
   this.token = opts.token || '';
@@ -27,10 +28,9 @@ C.prototype.setup = function(opts){
     language: this.language
   }
 
-  mkdirp(C.paths.settings, {}, function(err, made){
+  mkdirp(C.paths.challenges, {}, function(err, made){
     if (err) throw "Unable to create ~/.config/codewars";
-    fs.writeFile(C.paths.settings + "settings.json",
-      JSON.stringify(settings));
+    fs.writeFile(C.paths.settings + "settings.json", JSON.stringify(settings));
   });
 }
 
@@ -57,6 +57,11 @@ C.prototype.next = function(){
   });
 
   return df.promise;
+}
+
+C.prototype.save = function(challenge){
+  fs.writeFile(C.paths.challenges + "current.json", JSON.stringify({slug: challenge.slug}));
+  fs.writeFile(C.paths.challenges + challenge.slug + ".json", JSON.stringify(challenge));
 }
 
 C.prototype.test = function(){

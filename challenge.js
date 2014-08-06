@@ -1,7 +1,11 @@
-function Challenge(body){
-  var body = JSON.parse(body);
-  this.name = body.name;
-  this.description = body.description;
+function Challenge(data){
+  var data = JSON.parse(data);
+  this._data = data;
+  this.name = data.name;
+  this.description = data.description;
+  this.slug = data.slug;
+  this.setup = data.session.setup;
+  this.tests = data.session.exampleFixture;
 }
 
 Challenge.prototype.toString = function(){
