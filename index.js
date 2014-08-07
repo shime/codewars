@@ -35,12 +35,12 @@ C.prototype.setup = function(opts){
   });
 }
 
-C.prototype.fetch = function(){
+C.prototype.checkCurrentChallenge = function(){
   var df = Q.defer(),
-      current = C.paths.challenges + 'current.json';
+  prompt = require("prompt"),
+  currentChallenge = C.paths.challenges + 'current.json';
 
-  if (fs.existsSync(current)){
-    var prompt = require("prompt");
+  if (fs.existsSync(currentChallenge)){
     prompt.start();
     prompt.message = "";
     prompt.delimiter = "";
@@ -61,28 +61,45 @@ C.prototype.fetch = function(){
         df.reject();
       }
       if (/^y/.test(answer)) {
-        fs.unlink(current);
-        fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-          if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
-            var token = JSON.parse(data).token;
-          if (!token) throw "Token not found, run 'codewars setup' first."
-            var language = JSON.parse(data).language.toLowerCase();
-          if (!language) throw "Language not found, run 'codewars setup' first."
-            if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
-
-              rest.post(C.paths.api + language + '/train', {
-                data: { strategy: 'random' },
-                headers: { Authorization: token }
-              }).on('complete', function(data, response) {
-                if (response.statusCode == 200) {
-                  df.resolve(response);
-                }
-                else df.reject(response);
-              });
-        });
+        fs.unlink(currentChallenge);
+        df.resolve();
       }
     });
+  } else {
+    df.resolve();
   }
+
+  return df.promise;
+}
+
+C.prototype.fetch = function(){
+  var df = Q.defer();
+
+  this.checkCurrentChallenge().
+  then(function(){
+
+    fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
+      if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
+      var token = JSON.parse(data).token;
+
+      if (!token) throw "Token not found, run 'codewars setup' first."
+      var language = JSON.parse(data).language.toLowerCase();
+
+      if (!language) throw "Language not found, run 'codewars setup' first."
+      if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
+
+      rest.post(C.paths.api + language + '/train', {
+        data: { strategy: 'random' },
+        headers: { Authorization: token }
+      }).on('complete', function(data, response) {
+        if (response.statusCode == 200) {
+          df.resolve(response);
+        }
+        else df.reject(response);
+      });
+    });
+
+  })
 
   return df.promise;
 }
