@@ -58,33 +58,31 @@ C.prototype.fetch = function(){
       answer = answer.trim().toLowerCase();
 
       if (/^n/.test(answer)) { 
-        console.log('returning');
-        return df.resolve();
+        df.reject();
       }
       if (/^y/.test(answer)) {
         fs.unlink(current);
+        fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
+          if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
+            var token = JSON.parse(data).token;
+          if (!token) throw "Token not found, run 'codewars setup' first."
+            var language = JSON.parse(data).language.toLowerCase();
+          if (!language) throw "Language not found, run 'codewars setup' first."
+            if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
+
+              rest.post(C.paths.api + language + '/train', {
+                data: { strategy: 'random' },
+                headers: { Authorization: token }
+              }).on('complete', function(data, response) {
+                if (response.statusCode == 200) {
+                  df.resolve(response);
+                }
+                else df.reject(response);
+              });
+        });
       }
     });
   }
-
-  fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-    if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
-    var token = JSON.parse(data).token;
-    if (!token) throw "Token not found, run 'codewars setup' first."
-    var language = JSON.parse(data).language.toLowerCase();
-    if (!language) throw "Language not found, run 'codewars setup' first."
-    if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
-
-    rest.post(C.paths.api + language + '/train', {
-      data: { strategy: 'random' },
-      headers: { Authorization: token }
-    }).on('complete', function(data, response) {
-      if (response.statusCode == 200) {
-        df.resolve(response);
-      }
-      else df.reject(response);
-    });
-  });
 
   return df.promise;
 }
