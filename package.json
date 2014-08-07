@@ -15,12 +15,14 @@
     "restler": "*",
     "q": "*",
     "msee": "*",
-    "prompt": "*"
+    "prompt": "*",
+    "char-spinner": "*"
   },
   "devDependencies": {
     "gulp": "*",
     "gulp-mocha": "*",
     "expect.js": "*",
-    "rewire": "*"
+    "rewire": "*",
+    "node-spinner": "git://github.com/shime/node-spinner.git"
   }
 }

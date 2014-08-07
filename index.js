@@ -73,7 +73,8 @@ C.prototype.checkCurrentChallenge = function(){
 }
 
 C.prototype.fetch = function(){
-  var df = Q.defer();
+  var df = Q.defer(),
+      self = this;
 
   this.checkCurrentChallenge().
   then(function(){
@@ -88,14 +89,20 @@ C.prototype.fetch = function(){
       if (!language) throw "Language not found, run 'codewars setup' first."
       if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
 
+      var spinner = require('char-spinner')();
+
       rest.post(C.paths.api + language + '/train', {
         data: { strategy: 'random' },
         headers: { Authorization: token }
       }).on('complete', function(data, response) {
         if (response.statusCode == 200) {
+          clearInterval(spinner);
           df.resolve(response);
         }
-        else df.reject(response);
+        else {
+          clearInterval(spinner);
+          df.reject(response);
+        }
       });
     });
 
@@ -114,7 +121,8 @@ C.prototype.save = function(challenge){
 
 C.prototype.train = function(challenge){
   // TODO: duplication
-  var df = Q.defer();
+  var df = Q.defer(),
+      self = this;
 
   fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
     if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
@@ -124,13 +132,18 @@ C.prototype.train = function(challenge){
     if (!language) throw "Language not found, run 'codewars setup' first."
     if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
 
+      var spinner = require('char-spinner')();
       rest.post(C.paths.api + challenge.slug + "/" + language + '/train', {
       headers: { Authorization: token }
     }).on('complete', function(data, response) {
       if (response.statusCode == 200) {
+        clearInterval(spinner);
         df.resolve(response);
       }
-      else df.reject(response);
+      else {
+        clearInterval(spinner);
+        df.reject(response);
+      }
     });
   });
 
