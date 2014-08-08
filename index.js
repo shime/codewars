@@ -42,6 +42,23 @@ C.prototype.setup = function(opts){
   });
 }
 
+C.prototype.validateLocalData = function(){
+  var df = Q.defer();
+    fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
+      if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
+      var token = JSON.parse(data).token;
+
+      if (!token) throw "Token not found, run 'codewars setup' first."
+      var language = JSON.parse(data).language.toLowerCase();
+
+      if (!language) throw "Language not found, run 'codewars setup' first."
+      if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
+      df.resolve({language: language, token: token});
+    });
+
+  return df.promise;
+}
+
 C.prototype.checkCurrentChallenge = function(){
   var df = Q.defer(),
   prompt = require("prompt"),
@@ -81,50 +98,28 @@ C.prototype.checkCurrentChallenge = function(){
 
 C.prototype.fetch = function(){
   var df = Q.defer(),
-      self = this;
+      self = this,
+      http = require('./http')(C);
 
   this.checkCurrentChallenge().
-  then(function(){
-
-    fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-      if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
-      var token = JSON.parse(data).token;
-
-      if (!token) throw "Token not found, run 'codewars setup' first."
-      var language = JSON.parse(data).language.toLowerCase();
-
-      if (!language) throw "Language not found, run 'codewars setup' first."
-      if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
-
-      require('./http')(C).getChallenge({language: language, token: token})
-      .then(function(response) { df.resolve(response)},
-            function(response) { df.reject(response)});
-    });
-
-  })
+  then(this.validateLocalData).
+  then(http.getChallenge.bind(this)).
+  then(df.resolve.bind(this),
+       df.reject.bind(this));
 
   return df.promise;
 }
 
 C.prototype.train = function(challenge){
-  // TODO: duplication
   var df = Q.defer(),
-      self = this;
+    self = this,
+    http = require('./http')(C);
 
-  fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-    if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
-    var token = JSON.parse(data).token;
-    if (!token) throw "Token not found, run 'codewars setup' first."
-    var language = JSON.parse(data).language.toLowerCase();
-    if (!language) throw "Language not found, run 'codewars setup' first."
-    if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
-
-    require('./http')(C).getChallenge({challenge: challenge,
-                                      language: language,
-                                      token: token})
-    .then(function(response) { df.resolve(response)},
-          function(response) { df.reject(response)});
-  });
+  this.validateLocalData().then(function(args){
+    args.challenge = challenge;
+    return http.startChallenge(args);
+  }).then(df.resolve.bind(this),
+          df.reject.bind(this));
 
   return df.promise;
 }

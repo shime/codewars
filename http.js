@@ -35,7 +35,7 @@ HTTP.prototype.startChallenge = function(args){
       spinner = require('char-spinner')(),
       df = Q.defer();
 
-  rest.post(C.paths.api + challenge.slug + "/" + language + '/train', {
+  rest.post(this.paths.api + challenge.slug + "/" + language + '/train', {
     headers: { Authorization: token }
   }).on('complete', function(data, response) {
     if (response.statusCode == 200) {
