@@ -1,6 +1,5 @@
 var fs = require("fs"),
     mkdirp = require("mkdirp"),
-    rest   = require("restler"),
     Q = require("q");
 
 module.exports = function(opts){
@@ -19,6 +18,14 @@ C.paths = {
 }
 C.paths.settings = C.paths.config + "codewars/";
 C.paths.challenges = C.paths.settings + "challenges/";
+
+C.prototype.save = function(challenge){
+  fs.writeFile(C.paths.challenges + "current.json", JSON.stringify({
+    slug: challenge.slug,
+    id:   challenge.id
+  }));
+  fs.writeFile(C.paths.challenges + challenge.slug + ".json", JSON.stringify(challenge));
+}
 
 C.prototype.setup = function(opts){
   this.token = opts.token || '';
@@ -89,34 +96,14 @@ C.prototype.fetch = function(){
       if (!language) throw "Language not found, run 'codewars setup' first."
       if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
 
-      var spinner = require('char-spinner')();
-
-      rest.post(C.paths.api + language + '/train', {
-        data: { strategy: 'random' },
-        headers: { Authorization: token }
-      }).on('complete', function(data, response) {
-        if (response.statusCode == 200) {
-          clearInterval(spinner);
-          df.resolve(response);
-        }
-        else {
-          clearInterval(spinner);
-          df.reject(response);
-        }
-      });
+      require('./http')(C).getChallenge({language: language, token: token})
+      .then(function(response) { df.resolve(response)},
+            function(response) { df.reject(response)});
     });
 
   })
 
   return df.promise;
-}
-
-C.prototype.save = function(challenge){
-  fs.writeFile(C.paths.challenges + "current.json", JSON.stringify({
-    slug: challenge.slug,
-    id:   challenge.id
-  }));
-  fs.writeFile(C.paths.challenges + challenge.slug + ".json", JSON.stringify(challenge));
 }
 
 C.prototype.train = function(challenge){
@@ -132,19 +119,11 @@ C.prototype.train = function(challenge){
     if (!language) throw "Language not found, run 'codewars setup' first."
     if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
 
-      var spinner = require('char-spinner')();
-      rest.post(C.paths.api + challenge.slug + "/" + language + '/train', {
-      headers: { Authorization: token }
-    }).on('complete', function(data, response) {
-      if (response.statusCode == 200) {
-        clearInterval(spinner);
-        df.resolve(response);
-      }
-      else {
-        clearInterval(spinner);
-        df.reject(response);
-      }
-    });
+    require('./http')(C).getChallenge({challenge: challenge,
+                                      language: language,
+                                      token: token})
+    .then(function(response) { df.resolve(response)},
+          function(response) { df.reject(response)});
   });
 
   return df.promise;
