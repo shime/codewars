@@ -130,7 +130,7 @@ C.prototype.checkCurrentChallenge = function(){
     prompt.get([{
 
       name: 'answer',
-      message: 'Current challenge is in progress. Dismiss? [y/N]'.magenta
+      message: 'Current challenge will be dismissed. Continue? [y/N]'.magenta
 
     }], function (err, result) {
       if (err) process.exit(1);
