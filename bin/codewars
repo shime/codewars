@@ -77,10 +77,11 @@ function train(){
 
       if (/^n/.test(answer)) train();
       if (/^y/.test(answer)) {
-        client.train(challenge).then(function(data){
-          var challenge = require('../challenge')(data.raw.toString('utf-8'));
-          client.save(challenge);
-        }, responseError);
+        client.train(challenge).
+          then(client.save(), responseError).then(function(){
+
+          log(msee.parse(challenge.acceptedMessage()));
+        });
       }
     });
   });
@@ -117,6 +118,10 @@ function finalize(){
   }, responseError);
 }
 
+function print(){
+  // TODO
+}
+
 if (argv.help) help();
 
 switch (command){
@@ -138,6 +143,10 @@ switch (command){
 
   case 'finalize':
     finalize();
+    break;
+
+  case 'print':
+    print();
     break;
 
   default:

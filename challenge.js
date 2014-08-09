@@ -11,8 +11,22 @@ function Challenge(data){
   this.rank = data.rank.toString().replace('-', '');
 }
 
+Challenge.prototype.extensions = {
+  ruby: 'rb',
+  javascript: 'js'
+}
+
 Challenge.prototype.toString = function(){
   return '#' + this.name + '\n#' + this.rank + ' KYU\n' + this.description;
+}
+
+Challenge.prototype.acceptedMessage = function(){
+  var extension = this.extensions[this.language];
+
+  return '# Challenge started\n\n' +
+  'To print these instructions again, run: `codewars print`\n' +
+  'To verify your solution, run: `codewars attempt solution.' +
+  extension + '`\n';
 }
 
 module.exports = function(args){

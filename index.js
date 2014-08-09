@@ -40,14 +40,17 @@ C.paths.settings = C.paths.config + "codewars/";
 C.paths.challenges = C.paths.settings + "challenges/";
 C.paths.currentChallenge = C.paths.challenges + "current.json";
 
-C.prototype.save = function(challenge){
-  var self = this;
+C.prototype.save = function(){
+  var self = this,
+      challenge = this.challenge;
+
   fs.writeFile(C.paths.currentChallenge, JSON.stringify({
     slug: challenge.slug,
     projectId: challenge.projectId,
     solutionId: challenge.solutionId,
     language: self.language
   }));
+
   fs.writeFile(C.paths.challenges + challenge.slug + ".json", JSON.stringify(challenge));
 }
 
@@ -143,6 +146,9 @@ C.prototype.train = function(challenge){
   var df = Q.defer(),
     self = this,
     http = require('./http')(C);
+
+  self.challenge = challenge;
+  self.challenge.language = this.language;
 
   this.validateLocalData().then(function(args){
     args.challenge = challenge;
