@@ -4,9 +4,12 @@ usage: codewars {COMMANDS} {OPTIONS}
 
 COMMANDS:
 
-  setup           Prepares you for communication with the API.
-  train           Starts new training session.
-  test            Checks if the client is ready for communication.
+  setup                Prepares you for communication with the API.
+  train                Starts new training session.
+  print                Prints instructions for current challenge.
+  attempt [solution]   Verifies provided solution.
+  finalize [solution]  Submits provided solution.
+  test                 Checks if the client is ready for communication.
 
 OPTIONS:
   
@@ -14,5 +17,5 @@ OPTIONS:
   -l, --language  The language you're practicing.
                   Currently only JavaScript and Ruby are supported.
                   Defaults to JavaScript.
-  -t, --token     Your 'remember user token', read from http://codewars.com.
+  -t, --token     Your 'API access token', from https://www.codewars.com/users/edit
 
