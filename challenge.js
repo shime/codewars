@@ -9,6 +9,7 @@ function Challenge(data){
   this.tests = data.session.exampleFixture;
   this.solutionId = data.session.solutionId;
   this.projectId = data.session.projectId;
+  this.setup = data.session.setup;
   this.rank = data.rank.toString().replace('-', '');
 }
 
@@ -18,7 +19,21 @@ Challenge.prototype.extensions = {
 }
 
 Challenge.prototype.toString = function(){
-  return '#' + this.name + '\n#' + this.rank + ' KYU\n' + this.description;
+  var buff = '#' + this.name + '\n' + 
+    '#' + this.rank + ' KYU' + '\n' + 
+    '\n------' + '\n' +
+    '# Description' + '\n' +
+    this.description + '\n' + 
+    '\n------' + '\n' +
+    '# Provided code' + '\n```\n' +
+    this.setup + '\n```\n';
+
+  if (this.tests) {
+    buff = buff + 
+      '# Provided tests' + '\n```\n' +
+      this.tests + '\n```\n';
+  }
+  return buff;
 }
 
 Challenge.prototype.acceptedMessage = function(){
