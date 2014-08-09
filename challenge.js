@@ -8,11 +8,11 @@ function Challenge(data){
   this.tests = data.session.exampleFixture;
   this.solutionId = data.session.solutionId;
   this.projectId = data.session.projectId;
-  this.rank = data.rank;
+  this.rank = data.rank.toString().replace('-', '');
 }
 
 Challenge.prototype.toString = function(){
-  return this.name + '\n=====\n' + this.description;
+  return '#' + this.name + '\n#' + this.rank + ' KYU\n' + this.description;
 }
 
 module.exports = function(args){
