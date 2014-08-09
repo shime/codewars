@@ -54,7 +54,7 @@ function logAttempt(data){
   if (data.valid) {
     log('\n')
     log(msee.parse("You can still make some final changes, before submitting with:\n" +
-        "```\ncodewars submit " + argv._[1] + "```"))
+        "```\ncodewars submit```"))
   } else {
     log('')
   }
@@ -126,8 +126,12 @@ function train(){
   });
 }
 
-function attempt(){
-  client.getSolution(argv._[1]).
+function verify(){
+  var path = argv._[1];
+  if (!path) throw "Path to solution not provided." +
+      " Run with: codewars verify /path/to/solution"
+
+  client.getSolution(path).
     then(client.attempt.bind(client)).
     then(function(response){
       var body = JSON.parse(response.raw.toString('utf-8'));
@@ -146,7 +150,7 @@ function attempt(){
   }, responseError)
 }
 
-function finalize(){
+function submit(){
   client.finalize().then(function(response){
     var body = JSON.parse(response.raw.toString('utf-8'));
     if (body.success){
@@ -182,12 +186,12 @@ switch (command){
     train();
     break;
 
-  case 'attempt':
-    attempt();
+  case 'verify':
+    verify();
     break;
 
-  case 'finalize':
-    finalize();
+  case 'submit':
+    submit();
     break;
 
   case 'print':

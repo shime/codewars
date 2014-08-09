@@ -7,8 +7,8 @@ COMMANDS:
   setup                Prepares you for communication with the API.
   train                Starts new training session.
   print                Prints instructions for current challenge.
-  attempt [solution]   Verifies provided solution.
-  finalize [solution]  Submits provided solution.
+  verify [solution]    Verifies provided solution.
+  submit [solution]    Submits provided solution.
   test                 Checks if the client is ready for communication.
 
 OPTIONS:
