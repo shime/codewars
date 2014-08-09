@@ -8,6 +8,9 @@
   },
   "author": "Hrvoje Simic",
   "license": "MIT",
+  "bin": {
+    "codewars": "bin/codewars"
+   },
   "dependencies": {
     "request": "*",
     "minimist": "*",
