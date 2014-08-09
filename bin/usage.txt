@@ -18,4 +18,5 @@ OPTIONS:
                   Currently only JavaScript and Ruby are supported.
                   Defaults to JavaScript.
   -t, --token     Your 'API access token', from https://www.codewars.com/users/edit
+  -s, --strategy  Strategy used for retreiving new challenges.
 

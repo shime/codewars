@@ -62,10 +62,12 @@ C.prototype.done = function(){
 C.prototype.setup = function(opts){
   this.token = opts.token || '';
   this.language = opts.language || '';
+  this.strategy = opts.strategy || 'default';
 
   var settings = {
     token: this.token,
-    language: this.language
+    language: this.language,
+    strategy: this.strategy
   }
 
   mkdirp(C.paths.challenges, {}, function(err, made){
@@ -85,7 +87,9 @@ C.prototype.validateLocalData = function(){
 
     if (!language) throw "Language not found, run 'codewars setup' first."
     if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
-    df.resolve({language: language, token: token});
+
+    var strategy  = JSON.parse(data).strategy.toLowerCase();
+    df.resolve({language: language, token: token, strategy: strategy});
   });
 
   return df.promise;

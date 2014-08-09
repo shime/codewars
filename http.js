@@ -8,12 +8,13 @@ function HTTP(settings){
 HTTP.prototype.getChallenge = function(args){
   var language = args.language,
       token = args.token,
+      strategy = args.strategy,
       spinner = require('char-spinner')(),
       df = Q.defer(),
       url = this.paths.api + language + '/train';
 
   rest.post(url, {
-    data: { strategy: 'kyu_8_workout' },
+    data: { strategy: strategy },
     headers: { Authorization: token }
   }).on('complete', function(data, response) {
     if (response.statusCode == 200) {

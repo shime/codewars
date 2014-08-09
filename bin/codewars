@@ -2,7 +2,7 @@
 
 var fs = require("fs"),
     argv = require('minimist')(
-      process.argv.slice(2), { alias: { h: 'help', t: 'token', l: 'language' } }
+      process.argv.slice(2), { alias: { h: 'help', t: 'token', l: 'language', s: 'strategy' } }
     ),
     codewars = require("../"),
     command  = argv._[0],
@@ -37,7 +37,8 @@ function setup(){
   }
   client.setup({
     language: argv.language,
-    token: argv.token
+    token: argv.token,
+    strategy: argv.strategy
   });
 }
 
