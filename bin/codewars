@@ -65,18 +65,24 @@ function help(){
 }
 
 function setup(){
+  var colors = require('colors');
   if (!argv.token) {
-    log("setup failed, missing required argument: token")
-    log("read your token here: https://www.codewars.com/users/edit")
+    log("Setup failed, missing required argument: --token".red);
+    log("Read your API access token here: https://www.codewars.com/users/edit".yellow);
+    log("\nUsage:");
+    log("codewars setup --token <token>\n");
     process.exit(1);
   }
   if (!/javascript|ruby/.test(argv.language)){
-    log("setup failed, unsupported language: " + argv.language);
+    log("Setup failed, unsupported language: ".red + argv.language.toString().red);
+    process.exit(1);
   }
   client.setup({
     language: argv.language,
     token: argv.token,
     strategy: argv.strategy
+  }).then(function(){
+    log("All done. Settings saved in ~/.config/codewars/settings.json".green);
   });
 }
 

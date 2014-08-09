@@ -70,16 +70,21 @@ C.prototype.setup = function(opts){
     strategy: this.strategy
   }
 
+  var df = Q.defer();
+
   mkdirp(C.paths.challenges, {}, function(err, made){
     if (err) throw "Unable to create ~/.config/codewars";
     fs.writeFile(C.paths.settings + "settings.json", JSON.stringify(settings));
+    df.resolve();
   });
+
+  return df.promise;
 }
 
 C.prototype.validateLocalData = function(){
   var df = Q.defer();
   fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-    if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
+    if (err) throw "Unable to read from ~/.config/codewars/settings.json. Run `codewars setup` first."
     var token = JSON.parse(data).token;
 
     if (!token) throw "Token not found, run 'codewars setup' first."
