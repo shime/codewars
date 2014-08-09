@@ -119,7 +119,11 @@ function finalize(){
 }
 
 function print(){
-  // TODO
+  client.getCurrentChallenge().
+    then(function(challenge){
+      var msee      = require("msee");
+      log(msee.parse(challenge.toString()));
+    })
 }
 
 if (argv.help) help();

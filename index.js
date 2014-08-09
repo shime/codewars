@@ -91,6 +91,29 @@ C.prototype.validateLocalData = function(){
   return df.promise;
 }
 
+C.prototype.getCurrentChallenge = function(){
+  var df = Q.defer(),
+      currentChallenge = C.paths.currentChallenge;
+  if (fs.existsSync(currentChallenge)){
+      fs.readFile(currentChallenge, {encoding: "utf-8"}, function(err, raw){
+        if (err) throw err;
+        var slug = JSON.parse(raw).slug,
+            challenge = C.paths.challenges + slug + '.json';
+        
+        fs.readFile(challenge, {encoding: "utf-8"}, function(err, raw){
+          if (err) throw err;
+          var data = JSON.parse(raw)._data;
+
+          df.resolve(require('./challenge')(JSON.stringify(data)));
+        })
+      });
+  } else {
+    df.reject()
+  }
+
+  return df.promise;
+}
+
 C.prototype.checkCurrentChallenge = function(){
   var df = Q.defer(),
       prompt = require("prompt"),

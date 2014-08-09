@@ -1,5 +1,6 @@
 function Challenge(data){
   var data = JSON.parse(data);
+
   this._data = data;
   this.name = data.name;
   this.description = data.description;
