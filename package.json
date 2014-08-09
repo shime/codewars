@@ -16,13 +16,13 @@
     "q": "*",
     "msee": "*",
     "prompt": "*",
-    "char-spinner": "*"
+    "char-spinner": "*",
+    "colors": "*"
   },
   "devDependencies": {
     "gulp": "*",
     "gulp-mocha": "*",
     "expect.js": "*",
-    "rewire": "*",
-    "node-spinner": "git://github.com/shime/node-spinner.git"
+    "rewire": "*"
   }
 }

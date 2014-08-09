@@ -186,7 +186,19 @@ C.prototype.train = function(challenge){
   return df.promise;
 }
 
-C.prototype.attempt = function(){
+C.prototype.getSolution = function(path){
+  var df = Q.defer();
+
+  fs.readFile(path, {encoding: "utf-8"}, function(err, raw){
+    if (err) throw err;
+
+    df.resolve(raw);
+  });
+
+  return df.promise;
+}
+
+C.prototype.attempt = function(solution){
   var currentChallenge = C.paths.currentChallenge,
       df = Q.defer(),
       http = require('./http')(C);
@@ -196,6 +208,7 @@ C.prototype.attempt = function(){
       fs.readFile(currentChallenge, {encoding: "utf-8"}, function(err, raw){
         if (err) throw err;
         args.challenge = JSON.parse(raw);
+        args.solution = solution;
 
         return http.attempt(args).then(df.resolve.bind(this), df.reject.bind(this));
       });

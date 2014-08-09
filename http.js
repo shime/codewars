@@ -55,6 +55,7 @@ HTTP.prototype.attempt = function(args){
   var language = args.language,
       token = args.token,
       challenge = args.challenge,
+      solution = args.solution,
       spinner = require('char-spinner')(),
       df = Q.defer();
 
@@ -63,7 +64,7 @@ HTTP.prototype.attempt = function(args){
             challenge.solutionId + '/attempt' ,
   {
     headers: { Authorization: token },
-    data: { code: 'def bool_to_word(arg); arg ? "Yes" : "No"; end' }
+    data: { code: solution }
   }).on('complete', function(data, response) {
     if (response.statusCode == 200) {
       clearInterval(spinner);

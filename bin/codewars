@@ -12,6 +12,7 @@ argv.language = (argv.language || "javascript").toLowerCase();
 
 var client = codewars();
 
+// TODO: extract logger, probably
 function responseError(response){
   var status = response.statusCode,
       body   = response.raw.toString('utf-8');
@@ -20,6 +21,43 @@ function responseError(response){
   log('Status: ' + status);
   log('Body:  ' + body);
   process.exit(1);
+}
+
+function logTestData(data){
+  var colors = require('colors'),
+      msee   = require('msee'),
+      assertions = data.passed + data.failed + data.errors;
+
+  log(msee.parse("## Tests"));
+
+  var buff = data.passed.toString().green + " passed".green + ', ' +
+    data.failed.toString().red   + " failed".red + ', ' +
+    data.errors.toString().red   + " errors".red + " in " +
+    data.wall_time.toString().yellow + 'ms'.yellow;
+
+  log(buff);
+}
+
+function logAttempt(data){
+  var colors = require('colors'),
+      msee   = require('msee');
+
+  if (data.valid){
+    log("Well done! Solution is correct. :)".green)
+  } else {
+    log("Nope. Your solution is incorrect. :(".red)
+    log(msee.parse('## Stack trace\n' + data.reason));
+  }
+
+  logTestData(data);
+
+  if (data.valid) {
+    log('\n')
+    log(msee.parse("You can still make some final changes, before submitting with:\n" +
+        "```\ncodewars submit " + argv._[1] + "```"))
+  } else {
+    log('')
+  }
 }
 
 function help(){
@@ -89,21 +127,23 @@ function train(){
 }
 
 function attempt(){
-  client.attempt().then(function(response){
-    var body = JSON.parse(response.raw.toString('utf-8'));
-    if (body.success){
-      var poll = function(){
-        client.poll(body.dmid).then(function(response){
-          var body = JSON.parse(response.raw.toString('utf-8'));
-          if (body.value == 'running') setTimeout(poll, 1000);
-          else log(body)
-        });
+  client.getSolution(argv._[1]).
+    then(client.attempt.bind(client)).
+    then(function(response){
+      var body = JSON.parse(response.raw.toString('utf-8'));
+      if (body.success){
+        var poll = function(){
+          client.poll(body.dmid).then(function(response){
+            var body = JSON.parse(response.raw.toString('utf-8'));
+            if (!body.success) setTimeout(poll, 1000);
+            else logAttempt(body)
+          });
+        }
+        poll()
+      } else {
+        log('Error: ' + body.reason);
       }
-      poll()
-    } else {
-      log('Error: ' + body.reason);
-    }
-  }, responseError);
+  }, responseError)
 }
 
 function finalize(){
