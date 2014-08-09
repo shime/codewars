@@ -10,6 +10,8 @@ var fs = require("fs"),
 
 argv.language = (argv.language || "javascript").toLowerCase();
 
+var client = codewars();
+
 function responseError(response){
   var status = response.statusCode,
       body   = response.raw.toString('utf-8');
@@ -33,21 +35,21 @@ function setup(){
   if (!/javascript|ruby/.test(argv.language)){
     log("setup failed, unsupported language: " + argv.language);
   }
-  codewars().setup({
+  client.setup({
     language: argv.language,
     token: argv.token
   });
 }
 
 function test(){
-  codewars().test().then(function(){
+  client.test().then(function(){
     log('Success - ready to rumble!');
     process.exit(0);
   }, responseError);
 }
 
 function train(){
-  codewars().fetch().then(function(data){
+  client.fetch().then(function(data){
     if (!data) return; 
 
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
@@ -75,9 +77,9 @@ function train(){
 
       if (/^n/.test(answer)) train();
       if (/^y/.test(answer)) {
-        codewars().train(challenge).then(function(data){
+        client.train(challenge).then(function(data){
           var challenge = require('../challenge')(data.raw.toString('utf-8'));
-          codewars().save(challenge);
+          client.save(challenge);
         }, responseError);
       }
     });
@@ -85,7 +87,6 @@ function train(){
 }
 
 function attempt(){
-  var client = codewars();
   client.attempt().then(function(response){
     var body = JSON.parse(response.raw.toString('utf-8'));
     if (body.success){
@@ -93,11 +94,25 @@ function attempt(){
         client.poll(body.dmid).then(function(response){
           var body = JSON.parse(response.raw.toString('utf-8'));
           if (body.value == 'running') setTimeout(poll, 1000);
+          else log(body)
         });
       }
       poll()
     } else {
       log('Error: ' + body.reason);
+    }
+  }, responseError);
+}
+
+function finalize(){
+  client.finalize().then(function(response){
+    var body = JSON.parse(response.raw.toString('utf-8'));
+    if (body.success){
+      log('Kata completed, congratulations!')
+      log('See more solutions here: http://www.codewars.com/kata/' +
+          client.challenge.slug +
+          '/solutions/' + client.challenge.language)
+      client.done();
     }
   }, responseError);
 }
@@ -119,6 +134,10 @@ switch (command){
 
   case 'attempt':
     attempt();
+    break;
+
+  case 'finalize':
+    finalize();
     break;
 
   default:

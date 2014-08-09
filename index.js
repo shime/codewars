@@ -20,6 +20,14 @@ function C (opts){
     });
   } 
 
+  if (fs.existsSync(C.paths.currentChallenge)){
+    fs.readFile(C.paths.currentChallenge, {encoding: "utf-8"}, function(err, raw){
+      var data = JSON.parse(raw);
+
+      self.challenge = data;
+    });
+  }
+
 }
 
 C.paths = {
@@ -30,14 +38,22 @@ C.paths = {
 
 C.paths.settings = C.paths.config + "codewars/";
 C.paths.challenges = C.paths.settings + "challenges/";
+C.paths.currentChallenge = C.paths.challenges + "current.json";
 
 C.prototype.save = function(challenge){
-  fs.writeFile(C.paths.challenges + "current.json", JSON.stringify({
+  var self = this;
+  fs.writeFile(C.paths.currentChallenge, JSON.stringify({
     slug: challenge.slug,
     projectId: challenge.projectId,
-    solutionId: challenge.solutionId
+    solutionId: challenge.solutionId,
+    language: self.language
   }));
   fs.writeFile(C.paths.challenges + challenge.slug + ".json", JSON.stringify(challenge));
+}
+
+C.prototype.done = function(){
+  var currentChallenge = C.paths.currentChallenge;
+  fs.unlink(currentChallenge);
 }
 
 C.prototype.setup = function(opts){
@@ -75,7 +91,7 @@ C.prototype.validateLocalData = function(){
 C.prototype.checkCurrentChallenge = function(){
   var df = Q.defer(),
       prompt = require("prompt"),
-      currentChallenge = C.paths.challenges + 'current.json';
+      currentChallenge = C.paths.currentChallenge;
 
   if (fs.existsSync(currentChallenge)){
     prompt.start();
@@ -138,7 +154,7 @@ C.prototype.train = function(challenge){
 }
 
 C.prototype.attempt = function(){
-  var currentChallenge = C.paths.challenges + 'current.json',
+  var currentChallenge = C.paths.currentChallenge,
       df = Q.defer(),
       http = require('./http')(C);
 
@@ -159,7 +175,7 @@ C.prototype.attempt = function(){
 }
 
 C.prototype.finalize = function(){
-  var currentChallenge = C.paths.challenges + 'current.json',
+  var currentChallenge = C.paths.currentChallenge,
       df = Q.defer(),
       http = require('./http')(C);
 
