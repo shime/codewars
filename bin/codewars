@@ -84,6 +84,24 @@ function train(){
   });
 }
 
+function attempt(){
+  var client = codewars();
+  client.attempt().then(function(response){
+    var body = JSON.parse(response.raw.toString('utf-8'));
+    if (body.success){
+      var poll = function(){
+        client.poll(body.dmid).then(function(response){
+          var body = JSON.parse(response.raw.toString('utf-8'));
+          if (body.value == 'running') setTimeout(poll, 1000);
+        });
+      }
+      poll()
+    } else {
+      log('Error: ' + body.reason);
+    }
+  }, responseError);
+}
+
 if (argv.help) help();
 
 switch (command){
@@ -97,6 +115,10 @@ switch (command){
 
   case 'train':
     train();
+    break;
+
+  case 'attempt':
+    attempt();
     break;
 
   default:

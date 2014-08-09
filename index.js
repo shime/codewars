@@ -10,19 +10,32 @@ module.exports = function(opts){
 }
 
 function C (opts){
+  var self = this;
+  if (fs.existsSync(C.paths.settings)){
+    fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, raw){
+      var data = JSON.parse(raw);
+
+      self.token = data.token;
+      self.language = data.language;
+    });
+  } 
+
 }
 
 C.paths = {
   config: process.env.HOME + "/.config/",
-  api: 'https://www.codewars.com/api/v1/code-challenges/'
+  api: 'https://www.codewars.com/api/v1/code-challenges/',
+  poll: 'https://www.codewars.com/api/v1/deferred/'
 }
+
 C.paths.settings = C.paths.config + "codewars/";
 C.paths.challenges = C.paths.settings + "challenges/";
 
 C.prototype.save = function(challenge){
   fs.writeFile(C.paths.challenges + "current.json", JSON.stringify({
     slug: challenge.slug,
-    id:   challenge.id
+    projectId: challenge.projectId,
+    solutionId: challenge.solutionId
   }));
   fs.writeFile(C.paths.challenges + challenge.slug + ".json", JSON.stringify(challenge));
 }
@@ -44,25 +57,25 @@ C.prototype.setup = function(opts){
 
 C.prototype.validateLocalData = function(){
   var df = Q.defer();
-    fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-      if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
-      var token = JSON.parse(data).token;
+  fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
+    if (err) throw "Unable to read from ~/.config/codewars/settings.json. Does it exist?"
+    var token = JSON.parse(data).token;
 
-      if (!token) throw "Token not found, run 'codewars setup' first."
-      var language = JSON.parse(data).language.toLowerCase();
+    if (!token) throw "Token not found, run 'codewars setup' first."
+    var language = JSON.parse(data).language.toLowerCase();
 
-      if (!language) throw "Language not found, run 'codewars setup' first."
-      if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
-      df.resolve({language: language, token: token});
-    });
+    if (!language) throw "Language not found, run 'codewars setup' first."
+    if (!/ruby|javascript/.test(language)) throw language + " is unsupported. Ruby and JS only."
+    df.resolve({language: language, token: token});
+  });
 
   return df.promise;
 }
 
 C.prototype.checkCurrentChallenge = function(){
   var df = Q.defer(),
-  prompt = require("prompt"),
-  currentChallenge = C.paths.challenges + 'current.json';
+      prompt = require("prompt"),
+      currentChallenge = C.paths.challenges + 'current.json';
 
   if (fs.existsSync(currentChallenge)){
     prompt.start();
@@ -122,6 +135,53 @@ C.prototype.train = function(challenge){
           df.reject.bind(this));
 
   return df.promise;
+}
+
+C.prototype.attempt = function(){
+  var currentChallenge = C.paths.challenges + 'current.json',
+      df = Q.defer(),
+      http = require('./http')(C);
+
+  this.validateLocalData().then(function(args){
+    if (fs.existsSync(currentChallenge)){
+      fs.readFile(currentChallenge, {encoding: "utf-8"}, function(err, raw){
+        if (err) throw err;
+        args.challenge = JSON.parse(raw);
+
+        return http.attempt(args).then(df.resolve.bind(this), df.reject.bind(this));
+      });
+    } else {
+      df.reject();
+    }
+  });
+
+  return df.promise;
+}
+
+C.prototype.finalize = function(){
+  var currentChallenge = C.paths.challenges + 'current.json',
+      df = Q.defer(),
+      http = require('./http')(C);
+
+  this.validateLocalData().then(function(args){
+    if (fs.existsSync(currentChallenge)){
+      fs.readFile(currentChallenge, {encoding: "utf-8"}, function(err, raw){
+        if (err) throw err;
+        args.challenge = JSON.parse(raw);
+
+        return http.finalize(args).then(df.resolve.bind(this), df.reject.bind(this));
+      });
+    } else {
+      df.reject();
+    }
+  });
+
+  return df.promise;
+}
+
+C.prototype.poll = function(id){
+  var http = require('./http')(C);
+  return http.poll({id: id, token: this.token});
 }
 
 C.prototype.test = function(){
