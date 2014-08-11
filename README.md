@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/shime/codewars.svg)](https://travis-ci.org/shime/codewars)
+[![NPM](https://nodei.co/npm/codewars-client.png?downloads=true&stars=true)](https://nodei.co/npm/codewars-client/)
 
 ## what?
 
