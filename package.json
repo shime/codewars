@@ -1,6 +1,6 @@
 {
   "name": "codewars-client",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Unofficial node client for CodeWars API",
   "main": "index.js",
   "scripts": {
