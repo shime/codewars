@@ -19,17 +19,17 @@ Challenge.prototype.extensions = {
 }
 
 Challenge.prototype.toString = function(){
-  var buff = '#' + this.name + '\n' + 
-    '#' + this.rank + ' KYU' + '\n' + 
+  var buff = '#' + this.name + '\n' +
+    '#' + this.rank + ' KYU' + '\n' +
     '\n------' + '\n' +
     '# Description' + '\n' +
-    this.description + '\n' + 
+    this.description + '\n' +
     '\n------' + '\n' +
     '# Provided code' + '\n```\n' +
     this.setup + '\n```\n';
 
   if (this.tests) {
-    buff = buff + 
+    buff = buff +
       '# Provided tests' + '\n```\n' +
       this.tests + '\n```\n';
   }
@@ -41,7 +41,7 @@ Challenge.prototype.acceptedMessage = function(){
 
   return '# Challenge started\n\n' +
   'To print these instructions again, run: `codewars print`\n' +
-  'To verify your solution, run: `codewars attempt solution.' +
+  'To verify your solution, run: `codewars verify solution.' +
   extension + '`\n';
 }
 
