@@ -8,11 +8,11 @@ COMMANDS:
   train                Starts new training session.
   print                Prints instructions for current challenge.
   verify [solution]    Verifies provided solution.
-  submit [solution]    Submits provided solution.
+  submit               Submits provided solution.
   test                 Checks if the client is ready for communication.
 
 OPTIONS:
-  
+
   -h, --help      You're looking at it.
   -l, --language  The language you're practicing.
                   Currently only JavaScript and Ruby are supported.
