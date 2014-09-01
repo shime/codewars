@@ -95,12 +95,12 @@ function test(){
 
 function train(){
   client.fetch().then(function(data){
-    if (!data) return; 
+    if (!data) return;
 
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
         msee      = require("msee"),
         prompt    = require("prompt");
-     
+
     log(msee.parse(challenge.toString()));
 
     prompt.start();
@@ -158,9 +158,11 @@ function verify(){
 
 function submit(){
   client.finalize().then(function(response){
-    var body = JSON.parse(response.raw.toString('utf-8'));
+    var body = JSON.parse(response.raw.toString('utf-8')),
+        msee = require('msee');
+
     if (body.success){
-      log('Kata completed, congratulations!')
+      log(msee.parse('## Kata completed'))
       log('See more solutions here: http://www.codewars.com/kata/' +
           client.challenge.slug +
           '/solutions/' + client.challenge.language)
