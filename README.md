@@ -17,7 +17,7 @@ Because Codewars is the best resource I've found for improving my coding skills.
 
 Install it with
 
-    npm install -g codewars-client
+    npm install codewars-client
 
 Now set it up with your API access token read from [https://www.codewars.com/users/edit](https://www.codewars.com/users/edit)
 
