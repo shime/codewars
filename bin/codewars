@@ -2,15 +2,19 @@
 
 var fs = require("fs"),
     argv = require('minimist')(
-      process.argv.slice(2), { alias: { h: 'help', t: 'token', l: 'language', s: 'strategy' } }
+        process.argv.slice(2),
+        {
+            alias: { h: 'help', t: 'token', l: 'language', s: 'strategy' }
+        }
     ),
     codewars = require("../"),
+    client = codewars(),
     command  = argv._[0],
-    log = function() { return console.log.apply(console, arguments); };
+    log = function() { return console.log.apply(console, arguments); },
+    msee = require('msee'),
+    colors = require('colors');
 
 argv.language = (argv.language || "javascript").toLowerCase();
-
-var client = codewars();
 
 // TODO: extract logger, probably
 function responseError(response){
@@ -24,9 +28,7 @@ function responseError(response){
 }
 
 function logTestData(data){
-  var colors = require('colors'),
-      msee   = require('msee'),
-      assertions = data.passed + data.failed + data.errors;
+  var assertions = data.passed + data.failed + data.errors;
 
   log(msee.parse("## Tests"));
 
@@ -39,9 +41,6 @@ function logTestData(data){
 }
 
 function logAttempt(data){
-  var colors = require('colors'),
-      msee   = require('msee');
-
   if (data.valid){
     log("Well done! Solution is correct. :)".green)
   } else {
@@ -65,7 +64,6 @@ function help(){
 }
 
 function setup(){
-  var colors = require('colors');
   if (!argv.token) {
     log("Setup failed, missing required argument: --token".red);
     log("Read your API access token here: https://www.codewars.com/users/edit".yellow);
@@ -98,7 +96,6 @@ function train(){
     if (!data) return;
 
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
-        msee      = require("msee"),
         prompt    = require("prompt");
 
     log(msee.parse(challenge.toString()));
@@ -158,8 +155,7 @@ function verify(){
 
 function submit(){
   client.finalize().then(function(response){
-    var body = JSON.parse(response.raw.toString('utf-8')),
-        msee = require('msee');
+    var body = JSON.parse(response.raw.toString('utf-8'));
 
     if (body.success){
       log(msee.parse('## Kata completed'))
@@ -174,8 +170,9 @@ function submit(){
 function print(){
   client.getCurrentChallenge().
     then(function(challenge){
-      var msee      = require("msee");
       log(msee.parse(challenge.toString()));
+    }).fail(function(err){
+      console.log(err.message.red)
     })
 }
 

@@ -18,7 +18,7 @@ function C (opts){
       self.token = data.token;
       self.language = data.language;
     });
-  } 
+  }
 
   if (fs.existsSync(C.paths.currentChallenge)){
     fs.readFile(C.paths.currentChallenge, {encoding: "utf-8"}, function(err, raw){
@@ -108,7 +108,7 @@ C.prototype.getCurrentChallenge = function(){
         if (err) throw err;
         var slug = JSON.parse(raw).slug,
             challenge = C.paths.challenges + slug + '.json';
-        
+
         fs.readFile(challenge, {encoding: "utf-8"}, function(err, raw){
           if (err) throw err;
           var data = JSON.parse(raw)._data;
@@ -117,7 +117,7 @@ C.prototype.getCurrentChallenge = function(){
         })
       });
   } else {
-    df.reject()
+    df.reject(new Error('no current challenge - run `codewars train` first'))
   }
 
   return df.promise;
@@ -145,7 +145,7 @@ C.prototype.checkCurrentChallenge = function(){
       if (!result.answer) answer = 'n';
       answer = answer.trim().toLowerCase();
 
-      if (/^n/.test(answer)) { 
+      if (/^n/.test(answer)) {
         df.reject();
       }
       if (/^y/.test(answer)) {
