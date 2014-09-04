@@ -126,6 +126,8 @@ function train(){
         });
       }
     });
+  }).fail(function(data){
+    console.log("HTTP error: ".red + JSON.parse(data.raw.toString('utf-8')).reason.red)
   });
 }
 
