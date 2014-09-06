@@ -1,6 +1,7 @@
 var fs = require("fs"),
     mkdirp = require("mkdirp"),
-    Q = require("q");
+    Q = require("q"),
+    HTTPError = require("./http_error");
 
 module.exports = function(opts){
   if (!opts) opts = {};
@@ -215,10 +216,13 @@ C.prototype.attempt = function(solution){
         args.challenge = JSON.parse(raw);
         args.solution = solution;
 
-        return http.attempt(args).then(df.resolve.bind(this), df.reject.bind(this));
+        return http.attempt(args).then(df.resolve.bind(this)).
+          fail(function(response){
+            df.reject(new HTTPError(response));
+          });
       });
     } else {
-      df.reject();
+      df.reject(new Error("Current challenge doesn't exist. Run `codewars train` first."));
     }
   });
 

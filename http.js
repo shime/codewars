@@ -60,7 +60,7 @@ HTTP.prototype.attempt = function(args){
       df = Q.defer();
 
   rest.post(this.paths.api + 'projects/' +
-            challenge.projectId + '/solutions/' + 
+            challenge.projectId + '/solutions/' +
             challenge.solutionId + '/attempt' ,
   {
     headers: { Authorization: token },
@@ -86,7 +86,7 @@ HTTP.prototype.finalize = function(args){
       df = Q.defer();
 
   var url = this.paths.api + 'projects/' +
-            challenge.projectId + '/solutions/' + 
+            challenge.projectId + '/solutions/' +
             challenge.solutionId + '/finalize' ;
 
   rest.post(url,

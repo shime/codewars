@@ -9,6 +9,7 @@ var fs = require("fs"),
     ),
     codewars = require("../"),
     client = codewars(),
+    HTTPError = require("../http_error"),
     command  = argv._[0],
     log = function() { return console.log.apply(console, arguments); },
     msee = require('msee'),
@@ -21,7 +22,7 @@ function responseError(response){
   var status = response.statusCode,
       body   = response.raw.toString('utf-8');
 
-  log('Oh noes! Something is wrong.\n');
+  log('HTTP error'.red);
   log('Status: ' + status);
   log('Body:  ' + body);
   process.exit(1);
@@ -126,9 +127,7 @@ function train(){
         });
       }
     });
-  }).fail(function(data){
-    console.log("HTTP error: ".red + JSON.parse(data.raw.toString('utf-8')).reason.red)
-  });
+  }).fail(responseError);
 }
 
 function verify(){
@@ -152,7 +151,14 @@ function verify(){
       } else {
         log('Error: ' + body.reason);
       }
-  }, responseError)
+  }).
+  fail(function(err){
+    if (err instanceof HTTPError) {
+      responseError(err.response)
+    } else {
+      console.log(err.message.red)
+    }
+  })
 }
 
 function submit(){
