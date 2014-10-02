@@ -2,9 +2,12 @@
 
 [![NPM](https://nodei.co/npm/codewars-client.png?downloads=true&stars=true)](https://nodei.co/npm/codewars-client/)
 
+[![demo](assets/demo.gif)]
+
 ## what?
 
 An unofficial client for the [Codewars](http://codewars.com) API. 
+It's like [NodeSchool](http://nodeschool.io/) with bunch of interesting katas!
 
 ## why?
 
