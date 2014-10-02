@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/codewars-client.png?downloads=true&stars=true)](https://nodei.co/npm/codewars-client/)
 
-[![demo](assets/demo.gif)]
+[![demo](assets/demo.gif)]()
 
 ## what?
 
