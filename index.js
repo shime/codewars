@@ -108,13 +108,17 @@ C.prototype.getCurrentChallenge = function(){
       fs.readFile(currentChallenge, {encoding: "utf-8"}, function(err, raw){
         if (err) throw err;
         var slug = JSON.parse(raw).slug,
+            language = JSON.parse(raw).language,
             challenge = C.paths.challenges + slug + '.json';
 
         fs.readFile(challenge, {encoding: "utf-8"}, function(err, raw){
           if (err) throw err;
           var data = JSON.parse(raw)._data;
+          data.language = language
 
-          df.resolve(require('./challenge')(JSON.stringify(data)));
+          var challenge = require('./challenge')(JSON.stringify(data))
+
+          df.resolve(challenge);
         })
       });
   } else {

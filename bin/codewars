@@ -178,7 +178,9 @@ function submit(){
 function print(){
   client.getCurrentChallenge().
     then(function(challenge){
-      log(msee.parse(challenge.toString()));
+      log(msee.parse(challenge.toString()))
+      log(msee.parse("-----"))
+      log(msee.parse(challenge.instructions()))
     }).fail(function(err){
       console.log(err.message.red)
     })
