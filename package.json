@@ -10,7 +10,7 @@
   "license": "MIT",
   "bin": {
     "codewars": "bin/codewars"
-   },
+  },
   "dependencies": {
     "request": "*",
     "minimist": "*",
@@ -27,5 +27,17 @@
     "gulp-mocha": "*",
     "expect.js": "*",
     "rewire": "*"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shime/codewars.git"
+  },
+  "keywords": [
+    "codewars",
+    "client"
+  ],
+  "bugs": {
+    "url": "https://github.com/shime/codewars/issues"
+  },
+  "homepage": "https://github.com/shime/codewars"
 }
