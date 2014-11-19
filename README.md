@@ -4,19 +4,11 @@
 
 [![demo](http://i.imgur.com/IWKPJ4T.gif)]()
 
-## what?
+Solve programming challenges from your favorite editor, without relying on the browser.
 
-An unofficial client for the [Codewars](http://codewars.com) API. 
-It's like [NodeSchool](http://nodeschool.io/) with bunch of interesting katas!
+It's like [NodeSchool](http://nodeschool.io/) with bunch of interesting katas.
 
-## why?
-
-Because we like to solve programming challenges from our editor/environment, without
-relying on the browser.
-
-Because Codewars is the best resource I've found for improving my coding skills. Solving the problem yourself and then seeing other solutions for the exact same problem is a tremendous way to improve yourself. 
-
-## usage?
+## Usage
 
 Install it with
 
@@ -30,6 +22,11 @@ And you're golden, start training with
 
     codewars train
 
-## license?
+Or specify a kata you would like to train with
+
+    # http://www.codewars.com/kata/539a0e4d85e3425cb0000a88
+    codewars train 539a0e4d85e3425cb0000a88
+
+## License
 
 MIT
