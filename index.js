@@ -223,7 +223,7 @@ C.prototype.attempt = function(solution){
           });
       });
     } else {
-      df.reject(new Error("Current challenge doesn't exist. Run `codewars train` first."));
+      df.reject(new Error("Challenge not in progress. Run 'codewars train' first."));
     }
   });
 
