@@ -1,7 +1,7 @@
 {
   "name": "codewars-client",
-  "version": "0.7.0",
-  "description": "Unofficial node client for CodeWars API",
+  "version": "0.8.0",
+  "description": "The missing command line client for Codewars API",
   "main": "index.js",
   "scripts": {
     "test": "gulp"
