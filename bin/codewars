@@ -92,8 +92,8 @@ function test(){
   }, responseError);
 }
 
-function train(){
-  client.fetch().then(function(data){
+function train(id){
+  client.fetch(id).then(function(data){
     if (!data) return;
 
     var challenge = require('../challenge')(data.raw.toString('utf-8')),
@@ -121,7 +121,10 @@ function train(){
       if (/^n/.test(answer)) train();
       if (/^y/.test(answer)) {
         client.train(challenge).
-          then(client.save(), responseError).then(function(){
+          then(function(data){
+            var challenge = require('../challenge')(data.raw.toString('utf-8'))
+            client.save(challenge)
+          }, responseError).then(function(){
 
           log(msee.parse(challenge.acceptedMessage()));
         });
@@ -198,7 +201,7 @@ switch (command){
     break;
 
   case 'train':
-    train();
+    train(argv._[1]);
     break;
 
   case 'verify':

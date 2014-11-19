@@ -5,12 +5,18 @@ function Challenge(data){
   this.name        = data.name
   this.description = data.description
   this.slug        = data.slug
-  this.setup       = data.session.setup
-  this.tests       = data.session.exampleFixture
-  this.solutionId  = data.session.solutionId
-  this.projectId   = data.session.projectId
-  this.setup       = data.session.setup
-  this.rank        = data.rank.toString().replace('-', '')
+  if (data.session){
+    this.setup       = data.session.setup
+    this.tests       = data.session.exampleFixture
+    this.solutionId  = data.session.solutionId
+    this.projectId   = data.session.projectId
+    this.setup       = data.session.setup
+  }
+  if (typeof data.rank === 'object'){
+    this.rank        = data.rank.id.toString().replace('-', '')
+  } else {
+    this.rank        = data.rank.toString().replace('-', '')
+  }
   this.language    = data.language
 }
 
@@ -26,11 +32,13 @@ Challenge.prototype.toString = function(){
     '\n------' + '\n' +
 
     '# Description' + '\n' +
-    this.description + '\n' +
-    '\n------' + '\n' +
-
-    '# Provided code' + '\n```\n' +
-    this.setup + '\n```\n';
+    this.description + '\n'
+  if (this.setup){
+    buff = buff +
+      '\n------' + '\n'
+      '# Provided code' + '\n```\n' +
+      this.setup + '\n```\n';
+  }
 
   if (this.tests) {
     buff = buff +

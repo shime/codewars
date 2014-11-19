@@ -13,7 +13,11 @@ HTTP.prototype.getChallenge = function(args){
       df = Q.defer(),
       url = this.paths.api + language + '/train';
 
-  rest.post(url, {
+  if (args.id) 
+    url = this.paths.api + args.id
+
+  rest.request(url, {
+    method: args.id ? 'get' : 'post',
     data: { strategy: strategy },
     headers: { Authorization: token }
   }).on('complete', function(data, response) {
