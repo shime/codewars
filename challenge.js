@@ -10,7 +10,6 @@ function Challenge(data){
     this.tests       = data.session.exampleFixture
     this.solutionId  = data.session.solutionId
     this.projectId   = data.session.projectId
-    this.setup       = data.session.setup
   }
   if (typeof data.rank === 'object'){
     this.rank        = data.rank.id.toString().replace('-', '')
@@ -33,9 +32,11 @@ Challenge.prototype.toString = function(){
 
     '# Description' + '\n' +
     this.description + '\n'
+
   if (this.setup){
     buff = buff +
-      '\n------' + '\n'
+      '\n------' + '\n' +
+
       '# Provided code' + '\n```\n' +
       this.setup + '\n```\n';
   }

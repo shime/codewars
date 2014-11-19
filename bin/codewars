@@ -29,13 +29,11 @@ function responseError(response){
 }
 
 function logTestData(data){
-  var assertions = data.passed + data.failed + data.errors;
-
   log(msee.parse("## Tests"));
 
-  var buff = data.passed.toString().green + " passed".green + ', ' +
-    data.failed.toString().red   + " failed".red + ', ' +
-    data.errors.toString().red   + " errors".red + " in " +
+  var buff = data.summary.passed.toString().green + " passed".green + ', ' +
+    data.summary.failed.toString().red + " failed".red + ', ' +
+    data.summary.errors.toString().red + " errors".red + " in " +
     data.wall_time.toString().yellow + 'ms'.yellow;
 
   log(buff);
