@@ -12,7 +12,7 @@ It's like [NodeSchool](http://nodeschool.io/) with bunch of interesting katas.
 
 Install it with
 
-    npm install codewars-client
+    npm install -g codewars-client
 
 Now set it up with your API access token read from [https://www.codewars.com/users/edit](https://www.codewars.com/users/edit)
 
