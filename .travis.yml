@@ -1,3 +1,20 @@
 language: node_js
+
+node_js:
+  - 0.12
+  - 4.0
+  - 4.1
+
 notifications:
   email: false
+
+before_install:
+  - npm install
+
+script:
+  - gulp
+
+matrix:
+  allow_failures:
+    - node_js: 4.0
+    - node_js: 4.1
