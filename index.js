@@ -12,8 +12,8 @@ module.exports = function(opts){
 
 function C (opts){
   var self = this;
-  if (fs.existsSync(C.paths.settings)){
-    fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, raw){
+  if (fs.existsSync(C.paths.settingsJSON)){
+    fs.readFile(C.paths.settingsJSON, {encoding: "utf-8"}, function(err, raw){
       var data = JSON.parse(raw);
 
       self.token = data.token;
@@ -38,6 +38,7 @@ C.paths = {
 }
 
 C.paths.settings = C.paths.config + "codewars/";
+C.paths.settingsJSON = C.paths.settings + "settings.json";
 C.paths.challenges = C.paths.settings + "challenges/";
 C.paths.currentChallenge = C.paths.challenges + "current.json";
 
@@ -72,7 +73,7 @@ C.prototype.setup = function(opts){
 
   mkdirp(C.paths.challenges, {}, function(err, made){
     if (err) throw "Unable to create ~/.config/codewars";
-    fs.writeFile(C.paths.settings + "settings.json", JSON.stringify(settings));
+    fs.writeFile(C.paths.settingsJSON, JSON.stringify(settings));
     df.resolve();
   });
 
@@ -81,8 +82,8 @@ C.prototype.setup = function(opts){
 
 C.prototype.validateLocalData = function(){
   var df = Q.defer();
-  fs.readFile(C.paths.settings + "settings.json", {encoding: "utf-8"}, function(err, data){
-    if (err) throw "Unable to read from ~/.config/codewars/settings.json. Run `codewars setup` first."
+  fs.readFile(C.paths.settingsJSON, {encoding: "utf-8"}, function(err, data){
+    if (err) throw "Unable to read from " + C.paths.settingsJSON + ". Run `codewars setup` first."
     var token = JSON.parse(data).token;
 
     if (!token) throw "Token not found, run 'codewars setup' first."
