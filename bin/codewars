@@ -215,5 +215,7 @@ switch (command){
     break;
 
   default:
-    help();
+    if (!argv.help) {
+      help();
+    }
 }
