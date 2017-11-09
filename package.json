@@ -4,7 +4,7 @@
   "description": "The missing command line client for Codewars API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/*"
+    "test": "standard && mocha test/*"
   },
   "author": "Hrvoje Simic",
   "license": "MIT",
@@ -26,7 +26,8 @@
     "expect.js": "*",
     "mocha": "^3.5.3",
     "prettyjson": "^1.0.0",
-    "rewire": "*"
+    "rewire": "*",
+    "standard": "^10.0.3"
   },
   "repository": {
     "type": "git",

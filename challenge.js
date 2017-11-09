@@ -1,22 +1,22 @@
-function Challenge(data){
-  var data         = JSON.parse(data)
+function Challenge (rawData) {
+  var data = JSON.parse(rawData)
 
-  this._data       = data
-  this.name        = data.name
+  this._data = data
+  this.name = data.name
   this.description = data.description
-  this.slug        = data.slug
-  if (data.session){
-    this.setup       = data.session.setup
-    this.tests       = data.session.exampleFixture
-    this.solutionId  = data.session.solutionId
-    this.projectId   = data.session.projectId
+  this.slug = data.slug
+  if (data.session) {
+    this.setup = data.session.setup
+    this.tests = data.session.exampleFixture
+    this.solutionId = data.session.solutionId
+    this.projectId = data.session.projectId
   }
-  if (typeof data.rank === 'object'){
-    this.rank        = data.rank.id.toString().replace('-', '')
+  if (typeof data.rank === 'object') {
+    this.rank = data.rank.id.toString().replace('-', '')
   } else {
-    this.rank        = data.rank.toString().replace('-', '')
+    this.rank = data.rank.toString().replace('-', '')
   }
-  this.language    = data.language
+  this.language = data.language
 }
 
 Challenge.prototype.extensions = {
@@ -24,7 +24,7 @@ Challenge.prototype.extensions = {
   javascript: 'js'
 }
 
-Challenge.prototype.toString = function(){
+Challenge.prototype.toString = function () {
   var buff = '#' + this.name + '\n' +
 
     '#' + this.rank + ' KYU' + '\n' +
@@ -33,34 +33,34 @@ Challenge.prototype.toString = function(){
     '# Description' + '\n' +
     this.description + '\n'
 
-  if (this.setup){
+  if (this.setup) {
     buff = buff +
       '\n------' + '\n' +
 
       '# Provided code' + '\n```\n' +
-      this.setup + '\n```\n';
+      this.setup + '\n```\n'
   }
 
   if (this.tests) {
     buff = buff +
       '# Provided tests' + '\n```\n' +
-      this.tests + '\n```\n';
+      this.tests + '\n```\n'
   }
-  return buff;
+  return buff
 }
 
-Challenge.prototype.acceptedMessage = function(){
+Challenge.prototype.acceptedMessage = function () {
   return '# Challenge started\n\n' +
     this.instructions()
 }
 
-Challenge.prototype.instructions = function(){
-  var extension = this.extensions[this.language];
+Challenge.prototype.instructions = function () {
+  var extension = this.extensions[this.language]
 
   return 'To print these instructions again, run: `codewars print`\n' +
-  'To verify your solution, run: `codewars verify solution.' + extension + '`\n';
+  'To verify your solution, run: `codewars verify solution.' + extension + '`\n'
 }
 
-module.exports = function(args){
-  return new Challenge(args);
+module.exports = function (args) {
+  return new Challenge(args)
 }
