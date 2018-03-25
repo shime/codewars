@@ -16,7 +16,7 @@ Install it with
 
 Now set it up with your API access token read from [https://www.codewars.com/users/edit](https://www.codewars.com/users/edit)
 
-    codewars setup --token <token>
+    codewars setup <token>
 
 And you're golden, start training with
 
