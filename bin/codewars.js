@@ -125,7 +125,7 @@ const print = () => {
 }
 
 const verify = (path) => {
-  if (!path){throw 'Path to solution not provided. Run with: codewars verify /path/to/solution' }
+  if (!path) { throw new Error('Path to solution not provided. Run with: codewars verify /path/to/solution') }
 
   client.getSolution(path).then(
     client.attempt.bind(client)).then(
