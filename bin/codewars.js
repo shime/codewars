@@ -8,8 +8,7 @@ const client = codewars()
 const HTTPError = require('../http_error')
 const log = function () { return console.log.apply(console, arguments) }
 const msee = require('msee')
-const colors = require('colors')
-
+require('colors')
 // TODO: extract logger, probably
 const responseError = response => {
   var status = response.statusCode
