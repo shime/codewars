@@ -78,7 +78,9 @@ C.prototype.setup = function (opts) {
 
   mkdirp(C.paths.challenges, {}, function (err, made) {
     if (err) throw new Error('Unable to create ~/.config/codewars')
-    fs.writeFile(C.paths.settingsJSON, JSON.stringify(settings))
+    fs.writeFile(C.paths.settingsJSON, JSON.stringify(settings), function (err) {
+      if (err) throw new Error('Unable to create ~/.config/codewars')
+    })
     df.resolve()
   })
 
