@@ -53,9 +53,14 @@ C.prototype.save = function (challenge) {
     projectId: challenge.projectId,
     solutionId: challenge.solutionId,
     language: this.language
-  }))
+  }), function (err) { if (err) console.log(err) })
 
-  fs.writeFile(C.paths.challenges + challenge.slug + '.json', JSON.stringify(challenge))
+    fs.writeFile(
+        C.paths.challenges + challenge.slug + '.json',
+        JSON.stringify(challenge),
+        function (err) {
+            if (err) console.log(err) 
+        })
 }
 
 C.prototype.done = function () {
@@ -160,7 +165,7 @@ C.prototype.checkCurrentChallenge = function () {
         df.reject()
       }
       if (/^y/.test(answer)) {
-        fs.unlink(currentChallenge)
+        fs.unlink(currentChallenge, function (err) { if (err) console.log(err) })
         df.resolve()
       }
     })
