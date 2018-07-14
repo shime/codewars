@@ -26,7 +26,7 @@
     "expect.js": "*",
     "mocha": "^3.5.3",
     "prettyjson": "^1.0.0",
-    "rewire": "*",
+    "rewire": "2.5.2",
     "standard": "^10.0.3"
   },
   "repository": {
