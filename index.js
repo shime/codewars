@@ -55,12 +55,12 @@ C.prototype.save = function (challenge) {
     language: this.language
   }), function (err) { if (err) console.log(err) })
 
-    fs.writeFile(
-        C.paths.challenges + challenge.slug + '.json',
-        JSON.stringify(challenge),
-        function (err) {
-            if (err) console.log(err) 
-        })
+  fs.writeFile(
+    C.paths.challenges + challenge.slug + '.json',
+    JSON.stringify(challenge),
+    function (err) {
+      if (err) console.log(err)
+    })
 }
 
 C.prototype.done = function () {
