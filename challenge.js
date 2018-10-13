@@ -56,9 +56,14 @@ Challenge.prototype.acceptedMessage = function () {
 
 Challenge.prototype.instructions = function () {
   var extension = this.extensions[this.language]
+  var extensionStr = '.' + extension
+
+  if (extension === undefined) {
+    extensionStr = ''
+  }
 
   return 'To print these instructions again, run: `codewars print`\n' +
-  'To verify your solution, run: `codewars verify solution.' + extension + '`\n'
+  'To verify your solution, run: `codewars verify solution' + extensionStr + '`\n'
 }
 
 module.exports = function (args) {
