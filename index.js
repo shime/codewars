@@ -48,14 +48,14 @@ C.paths.challenges = C.paths.settings + 'challenges/'
 C.paths.currentChallenge = C.paths.challenges + 'current.json'
 
 C.prototype.save = function (challenge) {
-  fs.writeFile(C.paths.currentChallenge, JSON.stringify({
+  fs.writeFileSync(C.paths.currentChallenge, JSON.stringify({
     slug: challenge.slug,
     projectId: challenge.projectId,
     solutionId: challenge.solutionId,
     language: this.language
   }))
 
-  fs.writeFile(C.paths.challenges + challenge.slug + '.json', JSON.stringify(challenge))
+  fs.writeFileSync(C.paths.challenges + challenge.slug + '.json', JSON.stringify(challenge))
 }
 
 C.prototype.done = function () {
@@ -78,7 +78,7 @@ C.prototype.setup = function (opts) {
 
   mkdirp(C.paths.challenges, {}, function (err, made) {
     if (err) throw new Error('Unable to create ~/.config/codewars')
-    fs.writeFile(C.paths.settingsJSON, JSON.stringify(settings))
+    fs.writeFileSync(C.paths.settingsJSON, JSON.stringify(settings))
     df.resolve()
   })
 
@@ -158,7 +158,7 @@ C.prototype.checkCurrentChallenge = function () {
         df.reject()
       }
       if (/^y/.test(answer)) {
-        fs.unlink(currentChallenge)
+        fs.unlinkSync(currentChallenge)
         df.resolve()
       }
     })
