@@ -1,6 +1,6 @@
 {
   "name": "codewars-client",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "The missing command line client for Codewars API",
   "main": "index.js",
   "scripts": {
